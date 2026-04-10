@@ -16,10 +16,10 @@ def roll(sides):
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
 
-        if not event.to_me:
-            continue
-
         text = event.text.lower()
+        sender = event.from_id  # кто отправил
+
+        print(f"DEBUG → sender: {sender}, text: {text}")
 
         # 🔹 преимущество
         if text.startswith("/дпре"):

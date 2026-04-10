@@ -9,6 +9,11 @@ vk = vk_session.get_api()
 longpoll = VkLongPoll(vk_session)
 
 
+# 🔹 состояние
+fail_streak = 0
+doom_active = False
+
+
 def roll(sides):
     return random.randint(1, sides)
 
@@ -25,24 +30,61 @@ for event in longpoll.listen():
         if text.startswith("/дпре"):
             r1 = roll(20)
             r2 = roll(20)
-            response = f"🎲 Преимущество: {r1} и {r2} → {max(r1, r2)}"
+            result = max(r1, r2)
+
+            if doom_active:
+                result -= 2
+
+            response = f"🎲 Преимущество: {r1} и {r2} → {result}"
 
         # 🔹 помеха
         elif text.startswith("/дпом"):
             r1 = roll(20)
             r2 = roll(20)
-            response = f"🎲 Помеха: {r1} и {r2} → {min(r1, r2)}"
+            result = min(r1, r2)
 
-        # 🔹 /д 20
+            if doom_active:
+                result -= 2
+
+            response = f"🎲 Помеха: {r1} и {r2} → {result}"
+
+        # 🔹 /д 20 (ключевая логика)
         elif text.startswith("/д "):
             try:
                 sides = int(text.split()[1])
                 result = roll(sides)
 
-                if result == sides:
-                    response = f"🎲 КРИТ! {result} из {sides}"
-                elif result == 1:
-                    response = f"💀 ПРОВАЛ! {result} из {sides}"
+                # 🔹 Судный час штраф
+                if doom_active:
+                    result -= 2
+
+                # 🔹 проверка только для d20
+                if sides == 20:
+
+                    # крит снимает эффект
+                    if result >= 20:
+                        fail_streak = 0
+                        doom_active = False
+                        response = f"🎲 КРИТ! {result} — Судный час рассеялся."
+                    
+                    elif result < 11:
+                        fail_streak += 1
+
+                        # активация
+                        if fail_streak > 5:
+                            doom_active = True
+                            response = (
+                                f"💀 Судный час наступил.\n"
+                                f"Неудач подряд: {fail_streak}\n"
+                                f"Теперь каждый бросок получает -2."
+                            )
+                        else:
+                            response = f"🎲 Выпало: {result} (неудача {fail_streak}/6)"
+
+                    else:
+                        fail_streak = 0
+                        response = f"🎲 Выпало: {result}"
+
                 else:
                     response = f"🎲 Выпало: {result} (1-{sides})"
 
@@ -61,11 +103,10 @@ for event in longpoll.listen():
                 rolls = [roll(sides) for _ in range(count)]
                 total = sum(rolls)
 
-                response = (
-                    f"🎲 {count}д{sides}:\n"
-                    f"Броски: {rolls}\n"
-                    f"Сумма: {total}"
-                )
+                if doom_active:
+                    total -= 2
+
+                response = f"🎲 {count}д{sides}: {rolls} → {total}"
 
             except:
                 response = "Ошибка. Пример: /2д20"

@@ -21,8 +21,36 @@ for event in longpoll.listen():
 
         text = event.text.lower()
 
-        # 🔹 /2д20 (множественные броски)
-        if text.startswith("/") and "д" in text and " " not in text:
+        # 🔹 преимущество
+        if text.startswith("/дпре"):
+            r1 = roll(20)
+            r2 = roll(20)
+            response = f"🎲 Преимущество: {r1} и {r2} → {max(r1, r2)}"
+
+        # 🔹 помеха
+        elif text.startswith("/дпом"):
+            r1 = roll(20)
+            r2 = roll(20)
+            response = f"🎲 Помеха: {r1} и {r2} → {min(r1, r2)}"
+
+        # 🔹 /д 20
+        elif text.startswith("/д "):
+            try:
+                sides = int(text.split()[1])
+                result = roll(sides)
+
+                if result == sides:
+                    response = f"🎲 КРИТ! {result} из {sides}"
+                elif result == 1:
+                    response = f"💀 ПРОВАЛ! {result} из {sides}"
+                else:
+                    response = f"🎲 Выпало: {result} (1-{sides})"
+
+            except:
+                response = "Напиши: /д 20"
+
+        # 🔹 /2д20
+        elif text.startswith("/") and "д" in text and " " not in text:
             try:
                 command = text[1:]
                 count, sides = command.split("д")
@@ -41,34 +69,6 @@ for event in longpoll.listen():
 
             except:
                 response = "Ошибка. Пример: /2д20"
-
-        # 🔹 /д 20 (один бросок)
-        elif text.startswith("/д "):
-            try:
-                sides = int(text.split()[1])
-                result = roll(sides)
-
-                if result == sides:
-                    response = f"🎲 КРИТ! {result} из {sides}"
-                elif result == 1:
-                    response = f"💀 ПРОВАЛ! {result} из {sides}"
-                else:
-                    response = f"🎲 Выпало: {result} (1-{sides})"
-
-            except:
-                response = "Напиши: /д 20"
-
-        # 🔹 преимущество
-        elif text.startswith("/дпре"):
-            r1 = roll(20)
-            r2 = roll(20)
-            response = f"🎲 Преимущество: {r1} и {r2} → {max(r1, r2)}"
-
-        # 🔹 помеха
-        elif text.startswith("/дпом"):
-            r1 = roll(20)
-            r2 = roll(20)
-            response = f"🎲 Помеха: {r1} и {r2} → {min(r1, r2)}"
 
         else:
             continue

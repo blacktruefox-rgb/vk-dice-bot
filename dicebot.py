@@ -16,10 +16,13 @@ def roll(sides):
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
 
+        if not event.to_me:
+            continue
+
         text = event.text.lower()
 
         # 🔹 /2д20 (множественные броски)
-        if text.startswith("/") and "д" in text:
+        if text.startswith("/") and "д" in text and " " not in text:
             try:
                 command = text[1:]
                 count, sides = command.split("д")
@@ -39,7 +42,7 @@ for event in longpoll.listen():
             except:
                 response = "Ошибка. Пример: /2д20"
 
-        # 🔹 /д 20 (обычный бросок)
+        # 🔹 /д 20 (один бросок)
         elif text.startswith("/д "):
             try:
                 sides = int(text.split()[1])

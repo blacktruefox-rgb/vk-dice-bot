@@ -2,7 +2,7 @@ import vk_api
 import random
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-TOKEN = "vk1.a.kA2CrMql1-Elz_Kua-6QYwc-qhZ3ly2rM0oa8tD_PSzKTaqu1cCSrjC5OijFIX1pTd-pvKPQnHv25fhMwDpxD7i5EJiPS2VHLaoXOF_fuptUeBc3U6Q7YFQvBXGVngICC6ESgccOZM7kJkCYhUPTG__5vDZ3w4cl4kKd_3pXv-hbdV9qGzBNrLoGIQ9jtHWODPWn5w-k6IwIi75_nkuq9g"
+TOKEN = "vk1.a.6koIKl5M4uGGMPfUL1i6wApc5GaY3sjcEaWZla8QYil5iahhZaoh92aIFPIJCwZBj8PGZFcM1njbIziHZswjqDjcKK7mqRQkW-LnysJVeUy1XSqqEU3kxmV9WHwZeH7VflZs_Nz5Q6fbCkpNahMb4yKoqx9RLQ3kLxkSpW33eCPue98sWFj72cp9OWQNzrNuOLyn9h-qDiUaRGxNkVEquQ"
 
 # создаём сессию
 vk_session = vk_api.VkApi(token=TOKEN)

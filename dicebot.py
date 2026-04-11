@@ -4,8 +4,13 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 
 TOKEN = "vk1.a.kA2CrMql1-Elz_Kua-6QYwc-qhZ3ly2rM0oa8tD_PSzKTaqu1cCSrjC5OijFIX1pTd-pvKPQnHv25fhMwDpxD7i5EJiPS2VHLaoXOF_fuptUeBc3U6Q7YFQvBXGVngICC6ESgccOZM7kJkCYhUPTG__5vDZ3w4cl4kKd_3pXv-hbdV9qGzBNrLoGIQ9jtHWODPWn5w-k6IwIi75_nkuq9g"
 
+# создаём сессию
 vk_session = vk_api.VkApi(token=TOKEN)
+
+# API для отправки сообщений
 vk = vk_session.get_api()
+
+# Long Poll для прослушки событий
 longpoll = VkLongPoll(vk_session)
 
 

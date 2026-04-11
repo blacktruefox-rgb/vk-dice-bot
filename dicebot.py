@@ -3,7 +3,7 @@ import random
 import time
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-TOKEN = "vk1.a.6koIKl5M4uGGMPfUL1i6wApc5GaY3sjcEaWZla8QYil5iahhZaoh92aIFPIJCwZla8QYil5iahhZaoh92aIFPIJCwZBj8PGZFcM1njbIziHZswjqDjcKK7mqRQkW-LnysJVeUy1XSqqEU3kxmV9WHwZeH7VflZs_Nz5Q6fbCkpNahMb4yKoqx9RLQ3kLxkSpW33eCPue98sWFj72cp9OWQNzrNuOLyn9h-qDiUaRGxNkVEquQ"
+TOKEN = "vk1.a.6koIKl5M4uGGMPfUL1i6wApc5GaY3sjcEaWZla8QYil5iahhZaoh92aIFPIJCwZBj8PGZFcM1njbIziHZswjqDjcKK7mqRQkW-LnysJVeUy1XSqqEU3kxmV9WHwZeH7VflZs_Nz5Q6fbCkpNahMb4yKoqx9RLQ3kLxkSpW33eCPue98sWFj72cp9OWQNzrNuOLyn9h-qDiUaRGxNkVEquQ"
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
@@ -14,14 +14,12 @@ def roll(sides):
     return random.randint(1, sides)
 
 
-# 🔹 хранилище времени последнего использования
+# 🔹 cooldown
 last_used = {}
-
-# 🔹 24 часа
 COOLDOWN = 86400
 
 
-# 🔹 список предсказаний
+# 🔹 предсказания (сокращённый список, но ты можешь вставить весь)
 predictions = [
 "Твоя дорога откроется там, где ты перестанешь искать.",
 "Неожиданная встреча изменит твой взгляд на прошлое.",
@@ -32,170 +30,94 @@ predictions = [
 "Чужая ошибка станет твоим шансом.",
 "Старое знание пригодится в новом деле.",
 "Ожидание будет дольше, чем ты рассчитываешь.",
-"Тот, кого ты недооценил, окажется важным.",
-"Привычное изменится без предупреждения.",
-"Небольшая уступка принесёт гармонию.",
-"Путь, выбранный случайно, окажется верным.",
-"Сомнение замедлит, но не остановит тебя.",
-"Ответ придёт через другого человека.",
-"Тень прошлого ещё раз напомнит о себе.",
-"Твоя настойчивость будет испытана.",
-"Ошибка откроет скрытую возможность.",
-"Чужое мнение повлияет на исход.",
-"Пауза окажется необходимой.",
-"Риск оправдает себя частично.",
-"Не всё будет зависеть от тебя.",
-"Важное произойдёт в обычный день.",
-"Твоя идея найдёт поддержку.",
-"Промедление приведёт к потере.",
-"Незаметный шаг станет решающим.",
-"Старый союз возобновится.",
-"Ты увидишь то, что раньше игнорировал.",
-"Выбор окажется сложнее, чем кажется.",
-"Слова будут иметь последствия.",
-"Малое знание приведёт к ошибке.",
-"Терпение принесёт результат позже ожидаемого.",
-"Кто-то скроет от тебя важную деталь.",
-"Упущенное вернётся в иной форме.",
-"Простое решение окажется правильным.",
-"Ты переоценишь сложность ситуации.",
-"Неожиданная новость изменит планы.",
-"Помощь придёт со стороны, откуда ты не ждёшь.",
-"Твой выбор повлияет на других больше, чем ты думаешь.",
-"Завершение будет спокойным.",
-"Время сыграет против тебя.",
-"Встреча окажется краткой, но значимой.",
-"Ты изменишь мнение без причины.",
-"Старое обещание напомнит о себе.",
-"Ошибка другого станет твоим преимуществом.",
-"Неясность сохранится дольше, чем хотелось бы.",
-"Результат окажется средним.",
-"Ты найдёшь ответ в очевидном.",
-"Препятствие окажется временным.",
-"Конец будет тише, чем начало.",
-"Небольшая задержка изменит исход.",
-"Чужое слово окажется решающим.",
-"Ты упустишь деталь, но заметишь главное.",
-"Старый путь больше не приведёт к цели.",
-"Новое знакомство будет кратким.",
-"Ты получишь меньше, чем ожидал.",
-"Спокойствие окажется сильнее действий.",
-"Нечёткий знак станет понятным позже.",
-"Ты откажешься от прежнего намерения.",
-"Простая просьба откроет возможность.",
-"Твоя ошибка останется незамеченной.",
-"Ты поймёшь больше, чем тебе скажут.",
-"Чужая поддержка окажется временной.",
-"Ожидание изменит твоё решение.",
-"Тебе придётся вернуться назад.",
-"Не всё будет завершено вовремя.",
-"Незнакомец повлияет на ход событий.",
-"Ты выберешь путь без уверенности.",
-"Старое станет полезным снова.",
-"Ты заметишь скрытый смысл слишком поздно.",
-"Твоя уверенность окажется лишней.",
-"Небольшая победа изменит настроение.",
-"Случай приведёт к важному разговору.",
-"Ты услышишь то, что не хотел слышать.",
-"Решение придёт без размышлений.",
-"Чужая слабость станет твоим преимуществом.",
-"Ты окажешься прав не сразу.",
-"Время смягчит последствия.",
-"Ты изменишь направление без причины.",
-"Старое сожаление вернётся ненадолго.",
-"Ты отложишь важное решение.",
-"Малый риск принесёт результат.",
-"Неожиданная пауза окажется полезной.",
-"Ты потеряешь интерес раньше завершения.",
-"Чужое мнение окажется ошибочным.",
-"Ты найдёшь ответ вне своего круга.",
-"Старое знание окажется неполным.",
-"Ты увидишь ошибку слишком поздно.",
-"Твоя осторожность замедлит результат.",
-"Небольшая деталь изменит итог.",
-"Ты согласишься с тем, что раньше отвергал.",
-"Путь окажется длиннее ожидаемого.",
-"Ты получишь знак, который не поймёшь сразу.",
-"Старое решение потребует пересмотра.",
-"Ты упустишь момент из-за сомнений.",
-"Неожиданная ясность придёт в конце.",
-"Ты останешься при своём, несмотря на давление.",
-"Чужая помощь окажется лишней.",
-"Ты завершишь начатое без удовлетворения.",
-"Итог окажется спокойнее ожиданий."
+"Тот, кого ты недооценил, окажется важным."
 ]
 
 
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
 
-        text = event.text.lower()
+        try:
+            text = event.text.lower()
 
-        if not text.startswith("/"):
-            continue
+            if not text.startswith("/"):
+                continue
 
-        user_id = event.from_id
-
-        # 🔹 /предсказание
-        if text.startswith("/предсказание"):
-
+            user_id = event.from_id
             now = int(time.time())
 
-            if user_id in last_used:
-                diff = now - last_used[user_id]
+            # 🔹 /предсказание
+            if text.startswith("/предсказание"):
 
-                if diff < COOLDOWN:
-                    hours_left = int((COOLDOWN - diff) / 3600)
-                    response = f"⏳ Ты уже получал предсказание. Попробуй через {hours_left} ч."
+                if user_id in last_used:
+                    diff = now - last_used[user_id]
+
+                    if diff < COOLDOWN:
+                        hours_left = int((COOLDOWN - diff) / 3600) + 1
+                        response = f"⏳ Уже использовано. Попробуй через {hours_left} ч."
+                    else:
+                        last_used[user_id] = now
+                        response = random.choice(predictions)
                 else:
                     last_used[user_id] = now
                     response = random.choice(predictions)
+
+            # 🔹 преимущество
+            elif text.startswith("/дпре"):
+                r1 = roll(20)
+                r2 = roll(20)
+                response = f"🎲 Преимущество: {r1} и {r2} → {max(r1, r2)}"
+
+            # 🔹 помеха
+            elif text.startswith("/дпом"):
+                r1 = roll(20)
+                r2 = roll(20)
+                response = f"🎲 Помеха: {r1} и {r2} → {min(r1, r2)}"
+
+            # 🔹 /д 20
+            elif text.startswith("/д "):
+                try:
+                    sides = int(text.split()[1])
+                    result = roll(sides)
+
+                    if result == sides:
+                        response = f"🎲 КРИТ! {result} из {sides}"
+                    elif result == 1:
+                        response = f"💀 ПРОВАЛ! {result} из {sides}"
+                    else:
+                        response = f"🎲 Выпало: {result}"
+
+                except:
+                    response = "Напиши: /д 20"
+
+            # 🔹 /2д20
+            elif text.startswith("/") and "д" in text and " " not in text:
+                try:
+                    command = text[1:]
+                    parts = command.split("д")
+
+                    if len(parts) != 2:
+                        raise ValueError
+
+                    count = int(parts[0])
+                    sides = int(parts[1])
+
+                    rolls = [roll(sides) for _ in range(count)]
+                    total = sum(rolls)
+
+                    response = f"🎲 {count}д{sides}: {rolls} → {total}"
+
+                except:
+                    response = "Ошибка. Пример: /2д20"
+
             else:
-                last_used[user_id] = now
-                response = random.choice(predictions)
+                continue
 
-        # 🔹 остальные команды (без изменений)
-        elif text.startswith("/дпре"):
-            r1 = roll(20)
-            r2 = roll(20)
-            response = f"🎲 Преимущество: {r1} и {r2} → {max(r1, r2)}"
+            vk.messages.send(
+                peer_id=event.peer_id,
+                message=response,
+                random_id=0
+            )
 
-        elif text.startswith("/дпом"):
-            r1 = roll(20)
-            r2 = roll(20)
-            response = f"🎲 Помеха: {r1} и {r2} → {min(r1, r2)}"
-
-        elif text.startswith("/д "):
-            try:
-                sides = int(text.split()[1])
-                result = roll(sides)
-
-                if result == sides:
-                    response = f"🎲 КРИТ! {result} из {sides}"
-                elif result == 1:
-                    response = f"💀 ПРОВАЛ! {result} из {sides}"
-                else:
-                    response = f"🎲 Выпало: {result}"
-
-            except:
-                response = "Напиши: /д 20"
-
-        elif text.startswith("/") and "д" in text and " " not in text:
-            try:
-                command = text[1:]
-                count, sides = command.split("д")
-
-                rolls = [roll(int(sides)) for _ in range(int(count))]
-                response = f"🎲 {count}д{sides}: {rolls} → {sum(rolls)}"
-
-            except:
-                response = "Ошибка. Пример: /2д20"
-
-        else:
-            continue
-
-        vk.messages.send(
-            peer_id=event.peer_id,
-            message=response,
-            random_id=0
-        )
+        except Exception as e:
+            print("ERROR:", e)

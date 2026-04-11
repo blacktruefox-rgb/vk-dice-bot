@@ -2,7 +2,7 @@ import vk_api
 import random
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-TOKEN = "vk1.a.C99-_0e4JFUlkTES3ZlyKFMRfdPODr54xoWH6cWoPeOveLSD-cxJZKYEBt_ieSNk9322WDd_V1JeRXvnJayytLNrBQi6tvJkikQ3pZPSSZc3AVE8XxqPA1JXtzy46PEIqb-g0vAqMQYAcOf2YRN3q7K9ZSnMgpqvlhS79SrtsdQWZ9p6reJp0bclsJw02Y4zrIxDT4-lb0gjGRxqAWpWxw"
+TOKEN = "vk1.a.kA2CrMql1-Elz_Kua-6QYwc-qhZ3ly2rM0oa8tD_PSzKTaqu1cCSrjC5OijFIX1pTd-pvKPQnHv25fhMwDpxD7i5EJiPS2VHLaoXOF_fuptUeBc3U6Q7YFQvBXGVngICC6ESgccOZM7kJkCYhUPTG__5vDZ3w4cl4kKd_3pXv-hbdV9qGzBNrLoGIQ9jtHWODPWn5w-k6IwIi75_nkuq9g"
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
@@ -18,7 +18,7 @@ for event in longpoll.listen():
 
         text = event.text.lower()
 
-        # 🔹 реагируем только на команды
+        # реагируем только на команды
         if not text.startswith("/"):
             continue
 

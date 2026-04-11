@@ -2,7 +2,7 @@ import vk_api
 import random
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-TOKEN = "vk1.a.6koIKl5M4uGGMPfUL1i6wApc5GaY3sjcEaWZla8QYil5iahhZaoh92aIFPIJCwZBj8PGZFcM1njbIziHZswjqDjcKK7mqRQkW-LnysJVeUy1XSqqEU3kxmV9WHwZeH7VflZs_Nz5Q6fbCkpNahMb4yKoqx9RLQ3kLxkSpW33eCPue98sWFj72cp9OWQNzrNuOLyn9h-qDiUaRGxNkVEquQ"
+TOKEN = "vk1.a.C99-_0e4JFUlkTES3ZlyKFMRfdPODr54xoWH6cWoPeOveLSD-cxJZKYEBt_ieSNk9322WDd_V1JeRXvnJayytLNrBQi6tvJkikQ3pZPSSZc3AVE8XxqPA1JXtzy46PEIqb-g0vAqMQYAcOf2YRN3q7K9ZSnMgpqvlhS79SrtsdQWZ9p6reJp0bclsJw02Y4zrIxDT4-lb0gjGRxqAWpWxw"
 
 vk_session = vk_api.VkApi(token=TOKEN)
 vk = vk_session.get_api()
@@ -16,7 +16,7 @@ def roll(sides):
 for event in longpoll.listen():
     if event.type == VkEventType.MESSAGE_NEW:
 
-        # 🔹 реагируем только на команды (избегаем спама)
+        # реагируем только на команды (без спама)
         if not event.to_me:
             continue
 
@@ -45,7 +45,7 @@ for event in longpoll.listen():
                 elif result == 1:
                     response = f"💀 ПРОВАЛ! {result} из {sides}"
                 else:
-                    response = f"🎲 Выпало: {result} (1-{sides})"
+                    response = f"🎲 Выпало: {result}"
 
             except:
                 response = "Напиши: /д 20"
